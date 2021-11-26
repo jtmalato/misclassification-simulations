@@ -23,21 +23,21 @@ Well-documented pull requests are particularly appreciated.
 
 ## How to cite
 
-> Malato, J., Graça, L., Sepúlveda, N. (2021).
+> Malato, J., Graça, L., Sepúlveda, N. (2022).
 
 ```
 @Article{Malato2021,
-   title =     {},
-   volume =    {},
-   url =       {},
-   DOI =       {},
-   number =    {},
-   journal =   {},
+   title     = {},
+   volume    = {},
+   url       = {},
+   DOI       = {},
+   number    = {},
+   journal   = {},
    publisher = {},
-   author =    {},
-   editor =    {},
-   year =      {},
-   month =     {},
-   pages =     {}
+   author    = {},
+   editor    = {},
+   year      = {2022},
+   month     = {},
+   pages     = {}
 }
 ```
