@@ -14,7 +14,7 @@
 * See the [figures](figures) folder contains the figures produced from the generated datasets.
 * See the [data](data) folder to look at the data used and replicate the results from the paper.
 
-![](figures/simulations-candidate-gene.png)
+![](figures/simulations-candidate-gene.pdf)
 
 ## Report issues
 
