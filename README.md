@@ -16,6 +16,8 @@
 
 ![](figures/simulations-candidate-gene.png)
 
+![](figures/simulations-steiner2020.png)
+
 ## Report issues
 
 Please add an issue or notify the authors should you find any error to correct or improvement to make.
