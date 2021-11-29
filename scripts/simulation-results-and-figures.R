@@ -54,17 +54,6 @@ theme_set(
 # Candidate gene ----------------------------------------------------------
 
 # Figure ------------------------------------------------------------------
-dt1 %>%
-  ggplot(aes(misrate, p, group = ss)) +
-  annotate("rect", xmin=0, xmax=1, ymin=0.80, ymax=1, alpha=0.2, fill="gray35") +
-  facet_grid(or_f ~ theta0, labeller = label_bquote(rows = Delta[T] == .(as.character(or_f)), cols = theta[0] == .(theta0))) +
-  geom_line(aes(colour = ss), size = 1.1) +
-  geom_hline(yintercept = 0.05, alpha = 0.8) +
-  scale_colour_manual(values = darken(viridis(6), 0.1)) +
-  scale_y_continuous(limits = c(0,1),
-                     breaks = sort(c(seq(0,1, 0.2))),
-                     labels = c("", "0.2","0.4","0.6","0.8", "1"), minor_breaks = 0.05)
-
 gg1 <- dt1 %>%
   ggplot(aes(misrate, p, group = ss)) +
   annotate("rect", xmin=0, xmax=1, ymin=0.80, ymax=1, alpha=0.2, fill="gray35") +
@@ -121,7 +110,6 @@ dt1_p80 <- lapply(seq_len(dt1_c[, .N]),
   rbindlist()
 
 # save it
-# setorder(table_p_80, n, theta0, -or_t, misrate)
 fwrite(dt1_p80, here("data/candidate-gene-power-above-80.csv"))
 
 dt1_p80[, or_f := factor(or_t, levels = c(10, 5, 2, 1.5, 1.25))]
@@ -169,32 +157,36 @@ ggsave(here("figures/simulations-serology.pdf"), gg2,
 
 # variables to filter by
 # all possible combinations
-dt2_c <- CJ(or = dt2[, unique(se_f)], theta = dt2[, unique(theta0)], n = dt1[, unique(sample_size)])
+dt2_c <- CJ(sens = dt2[, unique(sensitivity)], spec = dt2[, unique(specificity)], n = dt2[, unique(sample_size)])
 
 # get individual datasets and select maximum misclassification when p>=80%
-power_p <- function(data, odds, theta, n, p_above) {
-  d <- data[or_t == as.numeric(odds) & theta0 == as.numeric(theta) & sample_size == as.numeric(n)]
+power_p <- function(data, sens, spec, n, p_above) {
+  d <- data[sensitivity == as.numeric(sens) & specificity == as.numeric(spec) & sample_size == as.numeric(n)]
   values <- ifelse(c(d[p >= p_above, .N] != 0, d[p >= p_above, .N] != 0),
                    c(d[d[p >= p_above, .N], misrate], tail(d[p >= p_above, p], 1)),
                    c(0, max(d[, p])))
-  d[1, .(or_t, theta0, sample_size,
+  d[1, .(sensitivity, specificity, sample_size,
          misrate = values[1], p_80 = values[2])]
 }
 
+# get data frame
+dt2_p80 <- lapply(seq_len(dt2_c[, .N]),
+                  function(x) power_p(data = dt2,
+                                      sens = as.numeric(dt2_c[x, 1]),
+                                      spec = as.numeric(dt2_c[x, 2]),
+                                      n    = as.numeric(dt2_c[x, 3]),
+                                      p_above = 0.80)) %>%
+  rbindlist()
 # save it
-# setorder(table_p_80, n, theta0, -or_t, misrate)
-fwrite(dt1_p80, here("data/candidate-gene-power-above-80.csv"))
+fwrite(dt2_p80, here("data/serology-power-above-80.csv"))
 
-dt1_p80[, or_f := factor(or_t, levels = c(10, 5, 2, 1.5, 1.25))]
-dt1_p80[, thetaf := factor(theta0, levels = c(0.5, 0.25, 0.10, 0.05))]
+dt2_p80[, sens := factor(sensitivity, levels = rev(unique(dt2_p80$sensitivity)))]
+dt2_p80[, spec := factor(specificity, levels = rev(unique(dt2_p80$specificity)))]
 
-rbind(dcast(dt1_p80[sample_size == 100],  or_f ~ theta0, value.var = "misrate"),
-      dcast(dt1_p80[sample_size == 250],  or_f ~ theta0, value.var = "misrate"),
-      dcast(dt1_p80[sample_size == 250],  or_f ~ theta0, value.var = "misrate"),
-      dcast(dt1_p80[sample_size == 1000], or_f ~ theta0, value.var = "misrate"),
-      dcast(dt1_p80[sample_size == 2500], or_f ~ theta0, value.var = "misrate"),
-      dcast(dt1_p80[sample_size == 5000], or_f ~ theta0, value.var = "misrate"))
-
-
-
+rbind(dcast(dt2_p80[sample_size == 100],  spec ~ sens, value.var = "misrate"),
+      dcast(dt2_p80[sample_size == 250],  spec ~ sens, value.var = "misrate"),
+      dcast(dt2_p80[sample_size == 250],  spec ~ sens, value.var = "misrate"),
+      dcast(dt2_p80[sample_size == 1000], spec ~ sens, value.var = "misrate"),
+      dcast(dt2_p80[sample_size == 2500], spec ~ sens, value.var = "misrate"),
+      dcast(dt2_p80[sample_size == 5000], spec ~ sens, value.var = "misrate"))
 # end
