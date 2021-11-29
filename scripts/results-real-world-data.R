@@ -16,7 +16,7 @@ library(colorspace)
 
 # Data --------------------------------------------------------------------
 steiner <- fread(here("data/2021-11-29_simulation-results-steiner2020.csv"))
-steiner[, snp := factor(snp, levels = rev(c("CTLA4", "PTPN22", "TNF2", "TNF1", "IRF5")))]
+steiner[, snp := factor(snp, levels = c("CTLA4", "PTPN22", "TNF2", "TNF1", "IRF5"))]
 
 # Theme -------------------------------------------------------------------
 theme_set(
@@ -57,7 +57,7 @@ gg_steiner <-
             hjust = 1.1, vjust = 0.8, alpha = 1, size = 4, show.legend = FALSE) +
   geom_line(aes(colour = snp), size = 1.1) +
   geom_hline(yintercept = 0.05, alpha = 0.8) +
-  scale_colour_manual(values = darken(viridis(5), 0.2), guide = guide_legend(reverse = TRUE)) +
+  scale_colour_manual(values = darken(viridis(5), 0.2)) +
   scale_y_continuous(limits = c(0,1),
                      breaks = sort(c(0.05, seq(0,1, 0.2))),
                      labels = c("", expression(alpha), "0.2","0.4","0.6","0.8", "1"), expand = expansion(0,0)) +
