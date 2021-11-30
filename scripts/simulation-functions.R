@@ -132,3 +132,82 @@ serology_simulations <- function(sim = 10000,
   return(out)
 }
 
+
+# Simulation structure 2.0 ------------------------------------------------
+serology_simulations_2 <- function(sim = 10000,
+                                 n_control = 100,
+                                 n_cfs = 100,
+                                 p0 = 0.5,
+                                 p0_cfs = 0.5,
+                                 or_t = 2,
+                                 se = 1,
+                                 sp = 1,
+                                 gamma = 0.5) {
+  require(data.table)
+  p1_true <- p1_t(p0_cfs, or_t)
+  # Controls ------------------------------------------
+  # true exposed/non-exposed healthy controls
+  xp_c <- data.table::data.table(xp = rbinom(sim, n_control, p0))[, nxp := n_control-xp][]
+  # structure of serological test
+  outcome_c <- xp_c[, .(t_pos = rbinom(sim, xp, se),
+                        t_neg = rbinom(sim, nxp, sp))][
+                          , `:=` (f_neg = xp_c$xp-t_pos,
+                                  f_pos = xp_c$nxp-t_neg)][]
+  # serological test outcome
+  serotest_c <- outcome_c[, .(pos = t_pos + f_pos,
+                              neg = t_neg + f_neg)]
+
+  # CFS------------------------------------------------
+  # apparent/false
+  n_apparent <- rbinom(sim, n_cfs, gamma)
+  xp_f <- data.table::data.table(xp = rbinom(sim, n_apparent, p0_cfs))[, nxp := n_apparent-xp][]
+  # structure of serological test
+  outcome_f <- xp_f[, .(t_pos = rbinom(sim, xp, se),
+                        t_neg = rbinom(sim, nxp, sp))][
+                          , `:=` (f_neg = xp_f$xp-t_pos,
+                                  f_pos = xp_f$nxp-t_neg)][]
+  # serological test outcome
+  serotest_f <- outcome_f[, .(pos = t_pos + f_pos,
+                              neg = t_neg + f_neg)]
+  # true
+  n_true <- n_cfs - n_apparent
+
+  xp_t <- data.table::data.table(xp = rbinom(sim, n_true, p1_true))[, nxp := n_true-xp][]
+  # structure of serological test
+  outcome_t <- xp_t[, .(t_pos = rbinom(sim, xp, se),
+                        t_neg = rbinom(sim, nxp, sp))][
+                          , `:=` (f_neg = xp_t$xp-t_pos,
+                                  f_pos = xp_t$nxp-t_neg)][]
+  # serological test outcome
+  serotest_t <- outcome_t[, .(pos = t_pos + f_pos,
+                              neg = t_neg + f_neg)]
+  # gather data created
+  data_obs <- cbind(hc=serotest_c, cfs=serotest_f+serotest_t)
+  vector_p_value <- apply(data_obs, 1, get_p_value)
+  p_value <- vector_p_value < 0.05
+  if(sum(is.na(p_value)) != 0) {p_value[is.na(p_value)] <- FALSE}
+  ci <- confidence_interval(p_value)
+  # overall exposure probability on any suspected case
+  p1 <- theta1(gamma=gamma, se=se, sp=sp, theta0=p0_cfs, theta1_true=p1_true)
+  # estimated OR of cases agains hc based on risk factor exposure
+  odds <- (p1 * (1-p0)) / ((1-p1) * p0)
+
+  out <- c(
+    sim         = sim,
+    n_control   = n_control,
+    n_cfs       = n_cfs,
+    sensitivity = se,
+    specificity = sp,
+    misrate     = gamma,
+    p           = mean(p_value),
+    p_min       = ci[1],
+    p_max       = ci[2],
+    overall_or  = odds,
+    or_t        = or_t,
+    theta0      = p0,
+    theta1_true = p1_true,
+    theta1      = p1
+  )
+  return(out)
+}
+
