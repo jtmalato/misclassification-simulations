@@ -101,7 +101,7 @@ gg_steiner2
 
 
 # Serology study ----------------------------------------------------------
-levels(cliff$virus)
+
 gg_cliff <-
   cliff %>%
   ggplot(aes(misrate, p, group = virus)) +
@@ -127,3 +127,32 @@ ggsave(here("figures/simulations-cliff2019.png"), gg_cliff,
 ggsave(here("figures/simulations-cliff2019.pdf"), gg_cliff,
        scale = 1, dpi = 320, width = 13, height = 13*0.6, device = cairo_pdf)
 
+
+
+# Both plots --------------------------------------------------------------
+
+library(patchwork)
+
+gg_steiner / gg_cliff +
+  patchwork::plot_annotation(tag_levels = "A")
+
+#
+# dt_m <- rbind(steiner[, .(misrate, p, var = snp, plot = "steiner")], cliff[, .(misrate, p, var = virus, plot = "cliff")])
+#
+# dt_m %>%
+#   ggplot(aes(misrate, p)) +
+#   facet_wrap(~plot) +
+#   annotate("rect", xmin=-Inf, xmax=Inf, ymin=0.80, ymax=1, alpha=0.2, fill="gray35") +
+#   geom_text(data = dt_m[misrate == 0],
+#             aes(x = 0, y = p, label = var, colour = var), family = "LM Roman 10",
+#             hjust = 1.1, vjust = 0.1, alpha = 1, size = 4.5, show.legend = FALSE) +
+#   geom_line(aes(colour = var), size = 1.1) +
+#   geom_hline(yintercept = 0.05, alpha = 0.8) +
+#   # scale_colour_manual(values = darken(viridis(12), 0.2)) +
+#   scale_y_continuous(limits = c(0,1),
+#                      breaks = sort(c(0.05, seq(0,1, 0.2))),
+#                      labels = c("", expression(alpha), "0.2","0.4","0.6","0.8", "1"), expand = expansion(0,0)) +
+#   scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.2), labels = c("0","0.2","0.4","0.6","0.8", "1"), expand = expansion(add = c(0.07, 0))) +
+#   coord_cartesian(expand = TRUE, clip = "off") +
+#   labs(x = expression(paste("Misclassification rate,")~gamma),
+#        y = "Probability of rejecting null hypothesis")
