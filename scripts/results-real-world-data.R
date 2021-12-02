@@ -60,7 +60,8 @@ gg_steiner <-
   annotate("rect", xmin=-Inf, xmax=Inf, ymin=0.80, ymax=1, alpha=0.2, fill="gray35") +
   geom_text(data = steiner[misrate == 0],
             aes(x = 0, y = p, label = snp, colour = snp), family = "LM Roman 10",
-            hjust = 1.1, vjust = c(0.1, 0.1, 0.65, -0.1, -0.3), alpha = 1, size = 4.5, show.legend = FALSE) +
+            hjust = c(0.75, 0.9, 1.1, 1.1, 1.1),
+            vjust = c(-0.4, -0.4, 0.4, -0.4, -0.6), alpha = 1, size = 4.5, show.legend = FALSE) +
   geom_line(aes(colour = snp), size = 1.1) +
   geom_hline(yintercept = 0.05, alpha = 0.8) +
   scale_colour_manual(values = darken(viridis(5), 0.2)) +
@@ -73,11 +74,10 @@ gg_steiner <-
        y = "Probability of rejecting null hypothesis")
 gg_steiner
 # png
-ggsave(here("figures/simulations-steiner2020.png"), gg_steiner,
-       scale = 1, dpi = 320, width = 13, height = 13*0.6)
+width <- 10
+ggsave(here("figures/simulations-steiner2020.png"), gg_steiner, scale = 1, dpi = 320, width = width, height = width*0.6)
 # pdf LaTeX
-ggsave(here("figures/simulations-steiner2020.pdf"), gg_steiner,
-       scale = 1, dpi = 320, width = 13, height = 13*0.6, device = cairo_pdf)
+ggsave(here("figures/simulations-steiner2020.pdf"), gg_steiner, scale = 1, dpi = 320, width = width, height = width*0.6, device = cairo_pdf)
 
 
 gg_steiner2 <-
@@ -120,12 +120,11 @@ gg_cliff <-
   labs(x = expression(paste("Misclassification rate,")~gamma),
        y = "Probability of rejecting null hypothesis")
 gg_cliff
+width <- 10
 # png
-ggsave(here("figures/simulations-cliff2019.png"), gg_cliff,
-       scale = 1, dpi = 320, width = 13, height = 13*0.6)
+ggsave(here("figures/simulations-cliff2019.png"), gg_cliff, scale = 1, dpi = 320, width = width, height = width*0.6)
 # pdf LaTeX
-ggsave(here("figures/simulations-cliff2019.pdf"), gg_cliff,
-       scale = 1, dpi = 320, width = 13, height = 13*0.6, device = cairo_pdf)
+ggsave(here("figures/simulations-cliff2019.pdf"), gg_cliff, scale = 1, dpi = 320, width = width, height = width*0.6, device = cairo_pdf)
 
 
 
