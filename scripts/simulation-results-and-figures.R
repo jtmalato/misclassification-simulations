@@ -117,7 +117,7 @@ dt1_p80[, thetaf := factor(theta0, levels = c(0.5, 0.25, 0.10, 0.05))]
 
 rbind(dcast(dt1_p80[sample_size == 100],  or_f ~ theta0, value.var = "misrate"),
       dcast(dt1_p80[sample_size == 250],  or_f ~ theta0, value.var = "misrate"),
-      dcast(dt1_p80[sample_size == 250],  or_f ~ theta0, value.var = "misrate"),
+      dcast(dt1_p80[sample_size == 500],  or_f ~ theta0, value.var = "misrate"),
       dcast(dt1_p80[sample_size == 1000], or_f ~ theta0, value.var = "misrate"),
       dcast(dt1_p80[sample_size == 2500], or_f ~ theta0, value.var = "misrate"),
       dcast(dt1_p80[sample_size == 5000], or_f ~ theta0, value.var = "misrate"))
@@ -185,7 +185,7 @@ dt2_p80[, spec := factor(specificity, levels = rev(unique(dt2_p80$specificity)))
 
 rbind(dcast(dt2_p80[sample_size == 100],  spec ~ sens, value.var = "misrate"),
       dcast(dt2_p80[sample_size == 250],  spec ~ sens, value.var = "misrate"),
-      dcast(dt2_p80[sample_size == 250],  spec ~ sens, value.var = "misrate"),
+      dcast(dt2_p80[sample_size == 500],  spec ~ sens, value.var = "misrate"),
       dcast(dt2_p80[sample_size == 1000], spec ~ sens, value.var = "misrate"),
       dcast(dt2_p80[sample_size == 2500], spec ~ sens, value.var = "misrate"),
       dcast(dt2_p80[sample_size == 5000], spec ~ sens, value.var = "misrate"))
