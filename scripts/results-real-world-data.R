@@ -25,6 +25,16 @@ cliff <- fread(here("data/2021-11-29_simulation-results-cliff2019.csv"))
 cliff[, virus := factor(virus)]
 
 
+dt1 <- fread(here("data/candidate-gene-steiner2020.csv"))
+
+
+dt1[1:4, .(cohort, n)]
+
+round(1-(232/305), 2)
+
+
+
+
 # Theme -------------------------------------------------------------------
 theme_set(
   theme_classic(base_size = 18, base_family = "LM Roman 10") +
@@ -49,10 +59,15 @@ theme_set(
 
 # Candidate gene ----------------------------------------------------------
 
-# steiner[snp == "CTLA4"] %>%
-#   ggplot(aes(misrate, p)) +
-#   geom_ribbon(aes(xmax = misrate, xmin = misrate, ymax = p_max, ymin = p_min), alpha = 0.4) +
-#   geom_line()
+steiner %>%
+  ggplot(aes(misrate, p, group = snp)) +
+  geom_ribbon(aes(xmax = misrate, xmin = misrate, ymax = p_max, ymin = p_min), alpha = 0.4) +
+  geom_vline(xintercept = 0.24, col = "firebrick2") +
+  geom_line() +
+  geom_hline(yintercept = c(0.4, 0.25))
+
+
+steiner[misrate == 0.24]
 
 gg_steiner <-
   steiner %>%
@@ -142,22 +157,3 @@ ggsave(here("figures/simulations-real-world.png"), scale = 1, dpi = 320, width =
 # pdf LaTeX
 ggsave(here("figures/simulations-real-world.pdf"), scale = 1, dpi = 320, width = width*2, height = width, device = cairo_pdf)
 #
-# dt_m <- rbind(steiner[, .(misrate, p, var = snp, plot = "steiner")], cliff[, .(misrate, p, var = virus, plot = "cliff")])
-#
-# dt_m %>%
-#   ggplot(aes(misrate, p)) +
-#   facet_wrap(~plot) +
-#   annotate("rect", xmin=-Inf, xmax=Inf, ymin=0.80, ymax=1, alpha=0.2, fill="gray35") +
-#   geom_text(data = dt_m[misrate == 0],
-#             aes(x = 0, y = p, label = var, colour = var), family = "LM Roman 10",
-#             hjust = 1.1, vjust = 0.1, alpha = 1, size = 4.5, show.legend = FALSE) +
-#   geom_line(aes(colour = var), size = 1.1) +
-#   geom_hline(yintercept = 0.05, alpha = 0.8) +
-#   # scale_colour_manual(values = darken(viridis(12), 0.2)) +
-#   scale_y_continuous(limits = c(0,1),
-#                      breaks = sort(c(0.05, seq(0,1, 0.2))),
-#                      labels = c("", expression(alpha), "0.2","0.4","0.6","0.8", "1"), expand = expansion(0,0)) +
-#   scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.2), labels = c("0","0.2","0.4","0.6","0.8", "1"), expand = expansion(add = c(0.07, 0))) +
-#   coord_cartesian(expand = TRUE, clip = "off") +
-#   labs(x = expression(paste("Misclassification rate,")~gamma),
-#        y = "Probability of rejecting null hypothesis")
