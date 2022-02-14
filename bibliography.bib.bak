@@ -1631,19 +1631,6 @@
   publisher = {{MDPI} {AG}},
 }
 
-@Article{Slomko2019,
-  author    = {Joanna S{\l}omko and Julia L Newton and S{\l}awomir Kujawski and Ma{\l}gorzata Tafil-Klawe and Jacek Klawe and Donald Staines and Sonya Marshall-Gradisnik and Pawel Zalewski},
-  journal   = {{BMJ} Open},
-  title     = {Prevalence and characteristics of chronic fatigue syndrome/myalgic encephalomyelitis ({CFS}/{ME}) in Poland: a cross-sectional study},
-  year      = {2019},
-  doi       = {10.1136/bmjopen-2018-023955},
-  month     = {mar},
-  number    = {3},
-  pages     = {e023955},
-  volume    = {9},
-  publisher = {{BMJ}},
-}
-
 @Comment{jabref-meta: databaseType:bibtex;}
 
 @Comment{jabref-meta: fileDirectoryLatex-joaom-DESKTOP-FIDPUDM:C:\\Users\\joaom\\Desktop\\PHD\\projects\\SPE_atas_artigo\\ATAS_SPE2019F;}
