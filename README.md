@@ -12,7 +12,7 @@
 
 * See the [scripts](scripts) folder to look at the simulation structure used for the two simulations and recreate Figure 1 (shown below), Figure 2, and spporting files?...
 * See the [figures](figures) folder contains the figures produced from the generated datasets.
-* See the [data](data) folder to look at the data used and replicate the results from the paper.
+* See the [data-cluster/no-correction](data-cluster) folder to look at the more data used and replicate the results from the paper.
 
 ![](figures/simulations-candidate-gene.png)
 
