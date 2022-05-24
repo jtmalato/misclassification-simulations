@@ -40,17 +40,42 @@ steiner[, `:=` (
     ][, `:=` (af = allele_risk / allele_total, n = allele_total / 2)
       ][, odds := af / (1 - af)
         ][, or := odds / odds[4], by = snp]
+
+# estimate odds ratio sandard error
+for(i in seq_along(unique(steiner$cohort))) {
+  for(j in unique(steiner$snp)) {
+    steiner[snp == j & cohort %in% c(unique(steiner$cohort)[c(i, 4)]), or_se := sqrt(sum(1/c(allele_normal, allele_risk)))]
+  }
+}
+# odds ratio 95% confidence interval
+steiner[, `:=` (or_lower = exp(c(log(or) - qnorm(1 - 0.05/2) * or_se)),
+                or_upper = exp(c(log(or) + qnorm(1 - 0.05/2) * or_se)))]
+# Two-tailed test p-value based on OR
+steiner[, or_p := 2 * pnorm(abs(log(or)) / or_se, lower.tail = FALSE)]
+# steiner[, pnorm(abs(log(or)) / or_se, lower.tail = TRUE)]
+# steiner[, pnorm(abs(log(or)) / or_se, lower.tail = FALSE)]
+# steiner[, 2 * pnorm(abs(log(or)) / or_se, lower.tail = FALSE)]
+
+for(i in seq_along(unique(steiner$cohort))) {
+  for(j in unique(steiner$snp)) {
+    ps <- chisq.test(steiner[snp == j & cohort %in% c(unique(steiner$cohort)[c(i, 4)]), matrix(c(allele_risk, allele_normal), ncol = 2, byrow = TRUE)])$p.value
+    steiner[snp == j & cohort %in% c(unique(steiner$cohort)[c(i, 4)]), chisq_p := ps]
+  }
+}
+steiner[cohort == "Control", chisq_p := 1]
+
+# library(magrittr)
+# library(ggplot2)
+#
+# steiner %>%
+#   ggplot(aes(or_p, chisq_p)) +
+#   geom_abline() +
+#   geom_point()
+
+steiner[cohort %in% c("CFS_w_ito"), .(snp, af = round(af, 2), or = round(or, 2), or_lower = round(or_lower, 2), or_upper = round(or_upper, 2), or_p = round(or_p, 3), chisq_p = round(chisq_p, 3))]
+steiner[cohort %in% c("Control"), .(snp, af = round(af, 2), or = round(or, 2), or_lower = round(or_lower, 2), or_upper = round(or_upper, 2), or_p = round(or_p, 3), chisq_p = round(chisq_p, 3))]
+
 # fwrite(steiner, here("data", "candidate-gene-steiner2020.csv"))
-
-
-
-steiner[, snp := factor(snp, levels = c("PTPN22", "CTLA4", "TNF1", "TNF2", "IRF5"))]
-# dcast(steiner[cohort %in% c("CFS", "Control"), .(snp, cohort, af = round(af, 2), n, or = round(or, 2))], snp ~ cohort, value.var = "af")
-# dcast(steiner[cohort %in% c("CFS", "Control"), .(snp, cohort, af = round(af, 2), n, or = round(or, 2))], snp ~ cohort, value.var = "or")
-dcast(steiner[cohort %in% c("CFS_w_ito", "Control"), .(snp, cohort, af = round(af, 2), n, or = round(or, 2))], snp ~ cohort, value.var = "or")
-# dcast(steiner[cohort %in% c("CFS", "Control"), .(snp, cohort, af = round(af, 2), n, or = round(or, 2))], snp ~ cohort, value.var = "af")
-# round(cbind(t1=steiner[cohort %in% c("CFS"), af],
-#       t1_estimate = p1_t(steiner[cohort %in% c("Control"), af], steiner[cohort %in% c("CFS_w_ito"), or])), 2)
 
 
 # Run simulations ---------------------------------------------------------
@@ -72,8 +97,8 @@ steiner[cohort == "CFS_w_ito", or]
 simulation_steiner <-
   data.table(
     sim = 10000,
-    n_control = steiner[cohort == "Control", n],
-    n_cfs = steiner[cohort == "CFS", n],
+    n_control = steiner[cohort == "Control", allele_total],
+    n_cfs = steiner[cohort == "CFS_w_ito", allele_total],
     p0 = steiner[cohort == "Control", af],
     or_t = steiner[cohort == "CFS_w_ito", or],
     se = 1,
@@ -92,7 +117,8 @@ sim_steiner <-
                                                or_t = or_t,
                                                se = se,
                                                sp = sp,
-                                               gamma = gamma)]
+                                               gamma = gamma,
+                                               test = "chisq.test")]
   }
 sim_steiner_dt <- as.data.table(sim_steiner)
 sim_steiner_dt[, snp := rep(unique(steiner$snp), each = length(seq(0, 1, 0.01)))]
@@ -128,15 +154,15 @@ simulation_steiner[, gamma := rep(seq(0, 1, 0.01), length(levels(steiner$snp)))]
 
 sim_steiner <-
   foreach(i = seq_len(nrow(simulation_steiner)), .combine = rbind, .packages = "data.table") %dopar% {
-    simulation_steiner[i, serology_simulations_2(sim = sim,
-                                                 n_control = n_control,
-                                                 n_cfs = n_cfs,
-                                                 p0 = p0,
-                                                 p0_cfs = p0_cfs,
-                                                 or_t = or_t,
-                                                 se = se,
-                                                 sp = sp,
-                                                 gamma = gamma)]
+    simulation_steiner[i, serology_simulations_both_tests(sim = sim,
+                                                          n_control = n_control,
+                                                          n_cfs = n_cfs,
+                                                          p0 = p0,
+                                                          p0_cfs = p0_cfs,
+                                                          or_t = or_t,
+                                                          se = se,
+                                                          sp = sp,
+                                                          gamma = gamma)]
   }
 sim_steiner_dt <- as.data.table(sim_steiner)
 sim_steiner_dt[, snp := rep(steiner[, as.character(unique(snp))], each = length(seq(0, 1, 0.01)))]

@@ -1,22 +1,26 @@
-# Joao Malato
-# 29/11/2021
-# Script where simulations on serology study Cliff et al. () are produced
+# Header ------------------------------------------------------------------
+# Author: Joao Malato
+# Date: 2022-05-16 11:50:02
+# Title: Simluations using Cliff et al. (2019) data
+# Description: Script where simulations on serology study Cliff et al. (2019) are produced
 
 
 # Libraries ---------------------------------------------------------------
-library(data.table)
 library(here)
+library(data.table)
+
 
 # Load functions ----------------------------------------------------------
 
 source(here("scripts/simulation-functions.R"))
 
 
-# real world simulation ---------------------------------------------------
+# Real world simulation ---------------------------------------------------
 
 
 # Cliff 2019 --------------------------------------------------------------
 
+## Estimate table values --------------------------------------------------
 
 # work with the significant ones
 cliff <- data.table(virus = rep(c("CMV", "EBV", "HSV1", "HSV2", "VZV", "HHV6"), each = 4),
@@ -29,19 +33,54 @@ cliff <- data.table(virus = rep(c("CMV", "EBV", "HSV1", "HSV2", "VZV", "HHV6"), 
                                 52, 190, 52+190, 104,
                                 52, 177, 52+177, 102))
 # dcast(cliff, cohort + n ~ virus, value.var = "exposed")
-# cliff <- cliff[!cohort %in% c("CFSmm", "CFSsa")]
+# number of non-exposed individuals
+cliff[, nexposed := n - exposed]
+# proportions of positive and negative individuals
 cliff[, pos := exposed / n][, neg := 1 - pos]
+# odds (i.e., likelihood) of being positive
 cliff[, odds := pos / neg]
+# odds ratio comparing ME/CFS against healthy controls
 cliff[, or := odds / odds[4], by = virus]
 
+# # use Rfast package to estimate OR, Cis and p-values
+# for(i in seq_along(unique(cliff$cohort))) {
+#   for(j in unique(cliff$virus)) {
+#     cliff[virus == j & cohort %in% c(unique(cliff$cohort)[c(i, 4)]),
+#           `:=` (
+#             or_pckg = Rfast::odds.ratio(matrix(c(exposed, nexposed), ncol = 2, byrow = FALSE))[[1]][1],
+#             or_lower = Rfast::odds.ratio(matrix(c(exposed, nexposed), ncol = 2, byrow = FALSE))[[2]][1],
+#             or_upper = Rfast::odds.ratio(matrix(c(exposed, nexposed), ncol = 2, byrow = FALSE))[[2]][2],
+#             or_p = Rfast::odds.ratio(matrix(c(exposed, nexposed), ncol = 2, byrow = FALSE))[[1]][2])
+#           ]
+#   }
+# }
 
-cliff[, virus := factor(virus, levels = c("CMV", "EBV", "HSV1", "HSV2", "VZV", "HHV6"))]
-dcast(cliff[cohort %in% c("CFS", "Control"), .(virus, cohort, pos = round(pos, 2), n, or = round(or, 2))], virus ~ cohort, value.var = "pos")
-dcast(cliff[cohort %in% c("CFS", "Control"), .(virus, cohort, pos = round(pos, 2), n, or = round(or, 2))], virus ~ cohort, value.var = "or")
-dcast(cliff[cohort %in% c("CFSsa", "Control"), .(virus, cohort, pos = round(pos, 2), n, or = round(or, 2))], virus ~ cohort, value.var = "or")
-# dcast(cliff[cohort %in% c("CFS", "Control"), .(snp, cohort, af = round(af, 2), n, or = round(or, 2))], snp ~ cohort, value.var = "af")
-# round(cbind(t1=cliff[cohort %in% c("CFS"), af],
-#       t1_estimate = p1_t(cliff[cohort %in% c("Control"), af], cliff[cohort %in% c("CFS_w_ito"), or])), 2)
+# odds ratio standard error
+for(i in seq_along(unique(cliff$cohort))) {
+  for(j in unique(cliff$virus)) {
+    cliff[virus == j & cohort %in% c(unique(cliff$cohort)[c(i, 4)]), or_se := sqrt(sum(1/c(exposed, nexposed)))]
+  }
+}
+# odds ratio 95% confidence interval
+cliff[, `:=` (or_lower = exp(log(or) - qnorm(1 - 0.05/2) * or_se),
+              or_upper = exp(log(or) + qnorm(1 - 0.05/2) * or_se))]
+# estimate contigency table (with healthy control) p-value
+cliff[, or_p := 2 * pnorm(abs(log(or)) / or_se, lower.tail = FALSE)]
+
+for(i in seq_along(unique(cliff$cohort))) {
+  for(j in unique(cliff$virus)) {
+    ps <- chisq.test(cliff[virus == j & cohort %in% c(unique(cliff$cohort)[c(i, 4)]), matrix(c(exposed, nexposed), ncol = 2, byrow = TRUE)])$p.value
+    cliff[virus == j & cohort %in% c(unique(cliff$cohort)[c(i, 4)]), chisq_p := ps]
+  }
+}
+cliff[cohort == "Control", chisq_p := 1]
+
+
+
+cliff[cohort %in% c("CFSsa"), .(virus, pos = round(pos, 2), or = round(or, 2), or_lower = round(or_lower, 2), or_upper = round(or_upper, 2), or_p = round(or_p, 3), chisq_p = round(chisq_p, 3))][c(3, 4, 2, 1, 5, 6)]
+cliff[cohort %in% c("Control"), .(virus, pos = round(pos, 2), or = round(or, 2), or_lower = round(or_lower, 2), or_upper = round(or_upper, 2), or_p = round(or_p, 3), chisq_p = round(chisq_p, 3))][c(3, 4, 2, 1, 5, 6)]
+
+
 # Run simulations ---------------------------------------------------------
 
 cliff[, unique(virus)]
@@ -72,13 +111,14 @@ registerDoParallel(3)
 sim_cliff <-
   foreach(i = seq_len(nrow(simulation_cliff)), .combine = rbind, .packages = "data.table") %dopar% {
     simulation_cliff[i, serology_simulations(sim = sim,
-                                               n_control = n_control,
-                                               n_cfs = n_cfs,
-                                               p0 = p0,
-                                               or_t = or_t,
-                                               se = se,
-                                               sp = sp,
-                                               gamma = gamma)]
+                                             n_control = n_control,
+                                             n_cfs = n_cfs,
+                                             p0 = p0,
+                                             or_t = or_t,
+                                             se = se,
+                                             sp = sp,
+                                             gamma = gamma,
+                                             test = "chisq.test")]
   }
 
 sim_cliff_dt <- as.data.table(sim_cliff)
