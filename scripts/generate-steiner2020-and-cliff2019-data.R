@@ -14,7 +14,8 @@ library(data.table)
 
 # Steiner 2020 ------------------------------------------------------------
 
-## Generate data ----------------------------------------------------------
+
+# |- Generate data --------------------------------------------------------
 
 # steiner table results
 steiner <-
@@ -61,7 +62,8 @@ steiner[, or_p := 2 * pnorm(abs(log(or)) / or_se, lower.tail = FALSE)]
 # steiner[cohort == "Control", chisq_p := 1]
 
 
-## Using patients with infection triggered onset --------------------------
+# |- Using patients with infection triggered onset ------------------------
+
 # (CFS_w_ito)
 
 steiner_tab_cfs <- steiner[cohort %in% c("CFS_w_ito"), .(snp, af = round(af, 2), or = round(or, 2), or_lower = round(or_lower, 2), or_upper = round(or_upper, 2), or_p = round(or_p, 3), order = seq_along(unique(steiner$snp)))]
@@ -71,10 +73,10 @@ steiner_tab_cfs[order(or_p), -"order"]
 steiner_tab_hc[steiner_tab_cfs[order(or_p)]$order]
 
 
-
 # Cliff 2019 --------------------------------------------------------------
 
-## Generate data ----------------------------------------------------------
+
+# |- Generate data --------------------------------------------------------
 
 # work with the significant ones
 cliff <- data.table(virus = rep(c("CMV", "EBV", "HSV1", "HSV2", "VZV", "HHV6"), each = 4),
@@ -87,6 +89,7 @@ cliff <- data.table(virus = rep(c("CMV", "EBV", "HSV1", "HSV2", "VZV", "HHV6"), 
                                 52, 190, 52+190, 104,
                                 52, 177, 52+177, 102))
 # dcast(cliff, cohort + n ~ virus, value.var = "exposed")
+
 # number of non-exposed individuals
 cliff[, nexposed := n - exposed]
 # proportions of positive and negative individuals
@@ -130,7 +133,8 @@ cliff[, or_p := 2 * pnorm(abs(log(or)) / or_se, lower.tail = FALSE)]
 # cliff[cohort == "Control", chisq_p := 1]
 
 
-## Using severely affected patients ---------------------------------------
+# |-- Using severely affected patients ------------------------------------
+
 # (CFSsa)
 
 cliff_tab_cfs <- cliff[cohort %in% c("CFSsa"), .(virus, pos = round(pos, 2), or = round(or, 2), or_lower = round(or_lower, 2), or_upper = round(or_upper, 2), or_p = round(or_p, 3), order = seq_along(unique(cliff$virus)))]
@@ -146,3 +150,5 @@ cliff_tab_hc[cliff_tab_cfs[order(or_p)]$order]
 fwrite(steiner, here("data", "steiner2020.csv"))
 # save cliff2019 table for simulations
 fwrite(cliff, here("data", "cliff2019.csv"))
+
+# end

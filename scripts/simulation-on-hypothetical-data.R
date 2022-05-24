@@ -21,26 +21,23 @@ library(doParallel, lib.loc = path)
 registerDoParallel(20)
 
 # Load functions ----------------------------------------------------------
-
 source(here("simulation-functions.R"))
 
 
 # Run simulations ---------------------------------------------------------
 
 
-
-# Candidate Gene ----------------------------------------------------------
+# |- Candidate Gene -------------------------------------------------------
 
 simulation_gene <- CJ(
   sim    = 10000,
   n_both = c(100, 250, 500, 1000, 2500, 5000),
-  p0     = c(0.01, 0.05, 0.1, 0.25, 0.5),
+  p0     = c(0.01, 0.05, 0.1, 0.25, 0.5), # last time we tried to use p0 = 0.01
   or_t   = c(1.25, 1.5, 2, 3, 5, 10),
   se     = 1,
   sp     = 1,
   gamma  = seq(0, 1, 0.01)
 )
-
 
 sim_gene <-
   foreach(i = seq_len(nrow(simulation_gene)), .combine = rbind, .packages = "data.table") %dopar% {
@@ -56,22 +53,11 @@ sim_gene <-
   }
 sim_gene_dt <- as.data.table(sim_gene)
 
-# fwrite(simulation_gene, here("data", paste0(paste(Sys.Date(), "simulation-structure-candidate-gene-or-3", sep = "_"), ".csv")))
-# fwrite(sim_gene_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-candidate-gene-or-3", sep = "_"), ".csv")))
 fwrite(simulation_gene, here("data", paste0(paste(Sys.Date(), "simulation-structure-candidate-gene", sep = "_"), ".csv")))
 fwrite(sim_gene_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-candidate-gene", sep = "_"), ".csv")))
 
-# library(ggplot2)
-# library(magrittr)
-#
-# sim_gene_dt %>%
-#   ggplot(aes(misrate, p_fisher)) +
-#   geom_hline(yintercept = 0.05) +
-#   geom_line(aes(col = as.factor(sample_size))) +
-#   facet_grid(or_t ~ theta0)
 
-
-# Serology ----------------------------------------------------------------
+# |- Serology -------------------------------------------------------------
 
 simulation_sero <- CJ(
   sim    = 10000,
@@ -101,4 +87,5 @@ sim_sero_dt <- as.data.table(sim_sero)
 
 fwrite(simulation_sero, here("data", paste0(paste(Sys.Date(), "simulation-structure-serology-or", sep = "_"), ".csv")))
 fwrite(sim_sero_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-serology-or", sep = "_"), ".csv")))
+
 # end

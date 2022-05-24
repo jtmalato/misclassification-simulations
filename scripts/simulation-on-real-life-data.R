@@ -33,13 +33,13 @@ source(here("simulation-functions.R"))
 # Run simulations ---------------------------------------------------------
 
 
-## steiner2020 ------------------------------------------------------------
+# |- steiner2020 ----------------------------------------------------------
 
-steiner[, unique(snp)]
-steiner[cohort == "Control", n]
-steiner[cohort == "CFS", n]
-steiner[cohort == "Control", af]
-steiner[cohort == "CFS_w_ito", or]
+# steiner[, unique(snp)]
+# steiner[cohort == "Control", n]
+# steiner[cohort == "CFS", n]
+# steiner[cohort == "Control", af]
+# steiner[cohort == "CFS_w_ito", or]
 
 simulation_steiner <-
   data.table(
@@ -55,7 +55,7 @@ simulation_steiner <- simulation_steiner[rep(seq_len(nrow(simulation_steiner)), 
 simulation_steiner[, gamma := rep(seq(0, 1, 0.01), length(unique(steiner$snp)))]
 
 
-### 1. Simulations general -------------------------------------------------
+# |-- 1. Simulations general ----------------------------------------------
 
 sim_steiner <-
   foreach(i = seq_len(nrow(simulation_steiner)), .combine = rbind, .packages = "data.table") %dopar% {
@@ -76,7 +76,7 @@ fwrite(simulation_steiner, here("data", paste0(paste(Sys.Date(), "simulation-str
 fwrite(sim_steiner_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-steiner2020", sep = "_"), ".csv")))
 
 
-### 2. Simulations with fisher.test (experiments) --------------------------
+# |-- 2. Simulations with fisher.test (experiments) -----------------------
 
 sim_steiner_2 <-
   foreach(i = seq_len(nrow(simulation_steiner)), .combine = rbind, .packages = "data.table") %dopar% {
@@ -96,15 +96,14 @@ sim_steiner_2_dt[, snp := rep(steiner[, as.character(unique(snp))], each = lengt
 fwrite(sim_steiner_2_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-steiner2020-2tests", sep = "_"), ".csv")))
 
 
+# |- cliff2019 ------------------------------------------------------------
 
-## cliff2019 ---------------------------------------------------------------
-
-cliff[, unique(virus)]
-cliff[cohort == "Control", n]
-cliff[cohort == "CFS", n]
-cliff[cohort == "Control", pos]
-cliff[cohort == "CFS", pos]
-cliff[cohort == "CFSsa", or]
+# cliff[, unique(virus)]
+# cliff[cohort == "Control", n]
+# cliff[cohort == "CFS", n]
+# cliff[cohort == "Control", pos]
+# cliff[cohort == "CFS", pos]
+# cliff[cohort == "CFSsa", or]
 
 simulation_cliff <-
   data.table(
@@ -120,7 +119,7 @@ simulation_cliff <- simulation_cliff[rep(seq_len(nrow(simulation_cliff)), each =
 simulation_cliff[, gamma := rep(seq(0, 1, 0.01), length(unique(cliff$virus)))]
 
 
-### 1. Simulations general -------------------------------------------------
+# |-- 1. Simulations general ----------------------------------------------
 
 sim_cliff <-
   foreach(i = seq_len(nrow(simulation_cliff)), .combine = rbind, .packages = "data.table") %dopar% {
@@ -142,7 +141,7 @@ fwrite(simulation_cliff, here("data", paste0(paste(Sys.Date(), "simulation-struc
 fwrite(sim_cliff_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-cliff2019", sep = "_"), ".csv")))
 
 
-### 2. Simulations with fisher.test (experiments) --------------------------
+# |-- 2. Simulations with fisher.test (experiments) -----------------------
 
 sim_cliff_2 <-
   foreach(i = seq_len(nrow(simulation_cliff)), .combine = rbind, .packages = "data.table") %dopar% {
@@ -160,4 +159,5 @@ sim_cliff_2_dt <- as.data.table(sim_cliff_2)
 sim_cliff_2_dt[, snp := rep(cliff[, as.character(unique(virus))], each = length(seq(0, 1, 0.01)))]
 
 fwrite(sim_cliff_2_dt, here("data", paste0(paste(Sys.Date(), "simulation-results-cliff2019-2tests", sep = "_"), ".csv")))
+
 # end
