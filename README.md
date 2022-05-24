@@ -14,9 +14,9 @@
 * See the [figures](figures) folder contains the figures produced from the generated datasets.
 * See the [data-cluster](data-cluster/no-correction) folder to look at the more data used and replicate the results from the paper.
 
-![](figures/simulations-candidate-gene.png)
+![](figures/2022-05-19_simulations-candidate-gene.png)
 
-![](figures/simulations-steiner2020.png)
+![](figures/2022-05-24_simulations-steiner2020.png)
 
 ## Report issues
 
