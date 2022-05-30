@@ -30,14 +30,14 @@ Well-documented pull requests are particularly appreciated.
 
 ```
 @Article{Malato2021,
-   title     = {},
+   title     = {Impact of Imperfect Diagnosis in ME/CFS Association Studies},
    volume    = {},
    url       = {},
    DOI       = {},
    number    = {},
    journal   = {},
    publisher = {},
-   author    = {},
+   author    = {João Malato and Luís Graça and Nuno Sepúlveda},
    editor    = {},
    year      = {2022},
    month     = {},
