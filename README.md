@@ -1,4 +1,4 @@
-# public-misclassification-simulations
+# Impact of Imperfect Diagnosis in ME/CFS Association Studies
 
 [![DOI]()]()
 [![Binder]()]()
