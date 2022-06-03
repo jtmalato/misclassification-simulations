@@ -6,4 +6,4 @@
 * `simulation-on-real-life-data`: Simulations on real-life scenarios.
 * `simulation-results-and-figures`: Script used to generate the article's Figures and Tables.
 
-Output files generated from the scripts were saved in the [data](data), [data-cluster](data-cluster/no-correction), or [figures](figures) folders.
+Output files generated from the scripts were saved in the [data](misclassification-simulations/data), [data-cluster](misclassification-simulations/data-cluster/no-correction), or [figures](misclassification-simulations/figures) folders.
