@@ -1,4 +1,4 @@
-# public-misclassification-simulations
+# Impact of Imperfect Diagnosis in ME/CFS Association Studies
 
 [![DOI]()]()
 [![Binder]()]()
@@ -11,9 +11,10 @@
 
 ## Code and data
 
-* See the [scripts](scripts) folder to look at the simulation structure used for the two simulations and recreate Figure 1 (shown below), Figure 2, and spporting files?...
-* See the [figures](figures) folder contains the figures produced from the generated datasets.
-* See the [data-cluster](data-cluster/no-correction) folder to look at the more data used and replicate the results from the paper.
+* [scripts](scripts) folder contains the code R used to generate hypothetical and real-life data, run the simulations, and create the article's results (such as Figure 1 and Figure 3A, shown below).
+* [data](data) folder contains original data from real-life studies and files to generate Tables 3 and 4.
+* [data-cluster](data-cluster/no-correction) folder contains the simulation results used.
+* [figures](figures) folder contains all the figures produced (formats: png with and without background, and pdf).
 
 ![](figures/2022-05-19_simulations-candidate-gene.png)
 
@@ -30,14 +31,14 @@ Well-documented pull requests are particularly appreciated.
 
 ```
 @Article{Malato2021,
-   title     = {},
+   title     = {Impact of Imperfect Diagnosis in ME/CFS Association Studies},
    volume    = {},
    url       = {},
    DOI       = {},
    number    = {},
    journal   = {},
    publisher = {},
-   author    = {},
+   author    = {João Malato and Luís Graça and Nuno Sepúlveda},
    editor    = {},
    year      = {2022},
    month     = {},
