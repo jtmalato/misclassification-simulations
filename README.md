@@ -17,7 +17,7 @@
 
 ![](figures/2022-05-19_simulations-candidate-gene.png)
 
-![](figures/2022-05-24_simulations-steiner2020.png =100x)
+![](figures/2022-05-24_simulations-steiner2020.png){ width=50% }
 
 ## Report issues
 
