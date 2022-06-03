@@ -6,4 +6,4 @@
 * `simulation-on-real-life-data`: Simulations on real-life scenarios.
 * `simulation-results-and-figures`: Script used to generate the article's Figures and Tables.
 
-Output files generated from the scripts were saved in the [data]([misclassification-simulations/data](https://github.com/jtmalato/misclassification-simulations/tree/main/data)), [data-cluster]([misclassification-simulations/data-cluster/no-correction](https://github.com/jtmalato/misclassification-simulations/tree/main/data-cluster/no-correction)), or [figures]([misclassification-simulations/figures](https://github.com/jtmalato/misclassification-simulations/tree/main/figures)) folders.
+Output files generated from the scripts were saved in the [data](https://github.com/jtmalato/misclassification-simulations/tree/main/data), [data-cluster](https://github.com/jtmalato/misclassification-simulations/tree/main/data-cluster/no-correction), or [figures](https://github.com/jtmalato/misclassification-simulations/tree/main/figures) folders.
