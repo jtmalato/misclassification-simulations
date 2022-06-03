@@ -1,4 +1,4 @@
-# Impact of Imperfect Diagnosis in ME/CFS Association Studies
+# Impact of imperfect diagnosis in ME/CFS association studies
 
 [![DOI]()]()
 [![Binder]()]()
