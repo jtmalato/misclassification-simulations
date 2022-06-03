@@ -16,8 +16,7 @@
 * [figures](figures) folder contains all the figures produced (formats: png with and without background, and pdf).
 
 ![](figures/2022-05-19_simulations-candidate-gene.png)
-![](figures/2022-05-24_simulations-steiner2020.png)
-
+<!-- ![](figures/2022-05-24_simulations-steiner2020.png) -->
 
 
 ## Report issues
