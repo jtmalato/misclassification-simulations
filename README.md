@@ -29,18 +29,29 @@ Well-documented pull requests are particularly appreciated.
 > Malato, J., Graça, L., Sepúlveda, N. (2022).
 
 ```
-@Article{Malato2021,
-   title     = {Impact of Imperfect Diagnosis in ME/CFS Association Studies},
+@Article{Malato2022.06.08.22276100,
+   author       = {Malato, Jo{\~a}o and Gra{\c c}a, Lu{\'\i}s and Sep{\'u}lveda, Nuno}},
+   title        = {Impact of imperfect diagnosis in ME/CFS association studies},
+   elocation-id = {2022.06.08.22276100},
+   year         = {2022},
+   DOI          = {10.1101/2022.06.08.22276100},
+   publisher    = {Cold Spring Harbor Laboratory Press},
+   URL          = {https://www.medrxiv.org/content/early/2022/06/08/2022.06.08.22276100},
+   eprint       = {https://www.medrxiv.org/content/early/2022/06/08/2022.06.08.22276100.full.pdf},
+   journal      = {medRxiv},
+}
+```
+<!--- @Article{Malato2022,
+   title     = {Impact of imperfect diagnosis in ME/CFS association studies},
    volume    = {},
    url       = {},
    DOI       = {},
    number    = {},
    journal   = {},
    publisher = {},
-   author    = {João Malato and Luís Graça and Nuno Sepúlveda},
+   author    = {Malato, Jo{\~a}o and Gra{\c c}a, Lu{\'\i}s and Sep{\'u}lveda, Nuno}},
    editor    = {},
    year      = {2022},
    month     = {},
    pages     = {}
-}
-```
+} ---> 
