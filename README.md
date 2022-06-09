@@ -1,6 +1,6 @@
 # Impact of Imperfect Diagnosis in ME/CFS Association Studies
 
-[![DOI](https://doi.org/10.1101/2022.06.08.22276100)](https://doi.org/10.1101/2022.06.08.22276100)
+[![DOI:10.1101/2022.06.08.22276100](http://img.shields.io/badge/DOI-10.1101/2022.06.08.22276100-0F80C1.svg)](https://doi.org/10.1101/2022.06.08.22276100)
 [![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/jtmalato/misclassification-simulations/blob/main/LICENSE)
 
 ## Publication
