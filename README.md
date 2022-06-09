@@ -1,11 +1,11 @@
 # Impact of Imperfect Diagnosis in ME/CFS Association Studies
 
-[![DOI]()]()
+[![DOI](https://doi.org/10.1101/2022.06.08.22276100)](https://doi.org/10.1101/2022.06.08.22276100)
 [![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/jtmalato/misclassification-simulations/blob/main/LICENSE)
 
 ## Publication
 
-* 📃 Preprint: 
+* 📃 Preprint: [https://www.medrxiv.org/content/10.1101/2022.06.08.22276100v1](https://www.medrxiv.org/content/10.1101/2022.06.08.22276100v1)
 * 📝 Peer reviewed publication: 
 
 ## Code and data
