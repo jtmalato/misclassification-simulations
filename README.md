@@ -1,12 +1,12 @@
-# Impact of Imperfect Diagnosis in ME/CFS Association Studies
+# Impact of Misdiagnosis in Case-Control Studies of Myalgic Encephalomyelitis/Chronic Fatigue Syndrome
 
-[![DOI:10.1101/2022.06.08.22276100](http://img.shields.io/badge/DOI-10.1101/2022.06.08.22276100-0F80C1.svg)](https://doi.org/10.1101/2022.06.08.22276100)
+[![DOI:10.3390/diagnostics13030531](http://img.shields.io/badge/DOI-10.3390/diagnostics13030531-0F80C1.svg)](https://doi.org/10.3390/diagnostics13030531)
 [![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/jtmalato/misclassification-simulations/blob/main/LICENSE)
 
 ## Publication
 
 * 📃 Preprint: [https://www.medrxiv.org/content/10.1101/2022.06.08.22276100v1](https://www.medrxiv.org/content/10.1101/2022.06.08.22276100v1)
-* 📝 Peer reviewed publication: 
+* 📝 Peer reviewed publication: [https://www.mdpi.com/2075-4418/13/3/531](https://www.mdpi.com/2075-4418/13/3/531)
 
 ## Code and data
 
@@ -29,29 +29,17 @@ Well-documented pull requests are particularly appreciated.
 > Malato, J., Graça, L., Sepúlveda, N. (2022).
 
 ```
-@Article{Malato2022.06.08.22276100,
-   author       = {Malato, Jo{\~a}o and Gra{\c c}a, Lu{\'\i}s and Sep{\'u}lveda, Nuno}},
-   title        = {Impact of imperfect diagnosis in ME/CFS association studies},
-   elocation-id = {2022.06.08.22276100},
-   year         = {2022},
-   DOI          = {10.1101/2022.06.08.22276100},
-   publisher    = {Cold Spring Harbor Laboratory Press},
-   URL          = {https://www.medrxiv.org/content/early/2022/06/08/2022.06.08.22276100},
-   eprint       = {https://www.medrxiv.org/content/early/2022/06/08/2022.06.08.22276100.full.pdf},
-   journal      = {medRxiv},
+@Article{diagnostics13030531,
+  author         = {Malato, João and Graça, Luís and Sepúlveda, Nuno},
+  journal        = {Diagnostics},
+  title          = {{Impact of Misdiagnosis in Case-Control Studies of Myalgic Encephalomyelitis/Chronic Fatigue Syndrome}},
+  year           = {2023},
+  doi            = {10.3390/diagnostics13030531},
+  issn           = {2075-4418},
+  number         = {3},
+  volume         = {13},
+  article-number = {531},
+  pubmedid       = {36766636},
+  url            = {https://www.mdpi.com/2075-4418/13/3/531},
 }
 ```
-<!--- @Article{Malato2022,
-   title     = {Impact of imperfect diagnosis in ME/CFS association studies},
-   volume    = {},
-   url       = {},
-   DOI       = {},
-   number    = {},
-   journal   = {},
-   publisher = {},
-   author    = {Malato, Jo{\~a}o and Gra{\c c}a, Lu{\'\i}s and Sep{\'u}lveda, Nuno}},
-   editor    = {},
-   year      = {2022},
-   month     = {},
-   pages     = {}
-} ---> 
